@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_stock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvStockName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_stock_name"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvStockCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/label_stock_code"
+            android:textColor="#757575"
+            app:layout_constraintBottom_toBottomOf="@+id/tvStockName"
+            app:layout_constraintStart_toEndOf="@+id/tvStockName" />
+
+
+
+        <TextView
+            android:id="@+id/tvOpenValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_opening_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStockCode" />
+
+        <TextView
+            android:id="@+id/tvOpenValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvOpenValueLabel"
+            app:layout_constraintStart_toEndOf="@id/tvOpenValueLabel" />
+
+        <TextView
+            android:id="@+id/tvCloseValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/label_closing_price"
+            app:layout_constraintBottom_toBottomOf="@id/tvOpenValue"
+            app:layout_constraintStart_toEndOf="@id/tvOpenValue" />
+
+        <TextView
+            android:id="@+id/tvCloseValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvCloseValueLabel"
+            app:layout_constraintStart_toEndOf="@id/tvCloseValueLabel" />
+
+
+
+        <TextView
+            android:id="@+id/tvMaxValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_high_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCloseValue" />
+
+        <TextView
+            android:id="@+id/tvMaxValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvMaxValueLabel"
+            app:layout_constraintStart_toEndOf="@id/tvMaxValueLabel" />
+
+        <TextView
+            android:id="@+id/tvMinValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/label_low_price"
+            app:layout_constraintBottom_toBottomOf="@id/tvMaxValue"
+            app:layout_constraintStart_toEndOf="@id/tvMaxValue" />
+
+        <TextView
+            android:id="@+id/tvMinValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvMinValueLabel"
+            app:layout_constraintStart_toEndOf="@id/tvMinValueLabel" />
+
+
+
+
+        <TextView
+            android:id="@+id/tvChangeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_price_change"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMinValue" />
+
+        <TextView
+            android:id="@+id/tvChangeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvChangeLabel"
+            app:layout_constraintStart_toEndOf="@id/tvChangeLabel" />
+
+        <TextView
+            android:id="@+id/tvAvgValueLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/label_monthly_avg"
+            app:layout_constraintBottom_toBottomOf="@+id/tvChangeValue"
+            app:layout_constraintStart_toEndOf="@+id/tvChangeValue" />
+
+        <TextView
+            android:id="@+id/tvAvgValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvAvgValueLabel"
+            app:layout_constraintStart_toEndOf="@id/tvAvgValueLabel" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/tvTradeNumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_transaction_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvAvgValue" />
+
+        <TextView
+            android:id="@+id/tvTradeNumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvTradeNumLabel"
+            app:layout_constraintStart_toEndOf="@id/tvTradeNumLabel" />
+
+        <TextView
+            android:id="@+id/tvTradeTotalLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/label_trade_volume"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTradeNumValue"
+            app:layout_constraintStart_toEndOf="@+id/tvTradeNumValue" />
+
+        <TextView
+            android:id="@+id/tvTradeTotalValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvTradeTotalLabel"
+            app:layout_constraintStart_toEndOf="@id/tvTradeTotalLabel" />
+
+        <TextView
+            android:id="@+id/tvTradeSumLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@string/label_trade_value"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTradeTotalValue"
+            app:layout_constraintStart_toEndOf="@+id/tvTradeTotalValue" />
+
+        <TextView
+            android:id="@+id/tvTradeSumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="0.00"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/tvTradeSumLabel"
+            app:layout_constraintStart_toEndOf="@id/tvTradeSumLabel" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
