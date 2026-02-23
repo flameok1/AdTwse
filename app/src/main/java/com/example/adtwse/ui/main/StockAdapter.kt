@@ -1,6 +1,7 @@
 package com.example.adtwse
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +66,22 @@ class StockAdapter(private val stocks: List<StockInfo>) :
             holder.tvChange.setTextColor(Color.RED)
         } else if (stock.change < 0) {
             holder.tvChange.setTextColor(Color.GREEN)
+        }
+
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+
+            // 建立對話框
+            androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle("${stock.name} (${stock.code})") // 標題顯示名稱與代碼
+                .setMessage(
+                    "本益比：${stock.peRatio}\n" +
+                            "殖利率：${stock.dividendYield}%\n" +
+                            "股價淨值比：${stock.pbRatio}"
+                ) // 顯示考題要求的內容
+                .setPositiveButton("確定", null) // 提供關閉按鈕
+                .show()
         }
     }
 

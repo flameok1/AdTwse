@@ -1,5 +1,6 @@
 package com.example.adtwse
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,11 +22,17 @@ class MainViewModel : ViewModel() {
     val stocks: LiveData<List<StockEvaluationResponse>> = _stocks
     private val repository = StockRepository()
 
+    private var isUpdating = false
+
     init {
 
     }
 
     fun loadStocks() {
+        if (isUpdating) return
+
+        isUpdating = true
+
         viewModelScope.launch {
             try {
                 val evalList = repository.fetchStockEvaluations()
@@ -65,6 +72,7 @@ class MainViewModel : ViewModel() {
 
                 evalList.forEach { item ->
                     masterMap[item.Code]?.let { existing ->
+
                         masterMap[item.Code] = existing.copy(
                             peRatio = item.PEratio.safeToDouble(),
                             dividendYield = item.DividendYield.safeToDouble(),
@@ -79,7 +87,10 @@ class MainViewModel : ViewModel() {
 
             } catch (e: Exception) {
                 e.printStackTrace()
+            }finally {
+                isUpdating = false
             }
+
         }
     }
 
