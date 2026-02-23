@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">AdTwse</string>
+    <string name="app_name">證券資訊 App</string>
+    <string name="label_stock_name">股票名稱</string>
+    <string name="label_stock_code">股票代號</string>
+    <string name="label_opening_price">開盤價</string>
+    <string name="label_closing_price">收盤價</string>
+    <string name="label_monthly_avg">月平均價</string>
+    <string name="label_price_change">漲跌價差</string>
+    <string name="label_high_price">最高價</string>
+    <string name="label_low_price">最低價</string>
+    <string name="label_trade_volume">成交股數</string>
+    <string name="label_transaction_count">成交筆數</string>
+    <string name="label_trade_value">成交金額</string>
 </resources>
