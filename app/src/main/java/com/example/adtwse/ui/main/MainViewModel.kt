@@ -8,6 +8,7 @@ import com.example.adtwse.data.model.StockInfo
 import com.example.adtwse.data.repository.StockRepository
 import com.example.adtwse.network.StockEvaluationResponse
 import com.example.adtwse.utils.safeToDouble
+import com.example.adtwse.utils.safeToLong
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,45 +28,53 @@ class MainViewModel : ViewModel() {
     fun loadStocks() {
         viewModelScope.launch {
             try {
-                val response = repository.fetchStocks()
+                val evalList = repository.fetchStockEvaluations()
+                val avgList = repository.fetchStockDayAvgAlls()
+                val dayList = repository.fetchStockDayAlls()
 
+                val masterMap = mutableMapOf<String, StockInfo>()
 
-                val currentMap = _stockList.value?.associateBy { it.code }?.toMutableMap() ?: mutableMapOf()
+                // 處理基本價格與交易量 (STOCK_DAY_ALL)
+                dayList.forEach { item ->
+                    masterMap[item.Code] = StockInfo(
+                        code = item.Code,
+                        name = item.Name,
+                        openingPrice = item.OpeningPrice.safeToDouble(),
+                        highestPrice = item.HighestPrice.safeToDouble(),
+                        lowestPrice = item.LowestPrice.safeToDouble(),
+                        tradeVolume = item.TradeVolume.safeToLong(),
+                        tradeValue = item.TradeValue.safeToLong(),
+                        tradeNum = item.Transaction.safeToLong(),
+                        change = item.Change.safeToDouble(),
+                        closingPrice = 0.0,
+                        monthlyAverage = 0.0,
+                        peRatio = 0.0,
+                        dividendYield = 0.0,
+                        pbRatio = 0.0
+                    )
+                }
 
-                response.forEach { res ->
-                    val code = res.Code
-                    val existingStock = currentMap[code]
-
-                    if (existingStock == null) {
-                        // no data
-                        currentMap[code] = StockInfo(
-                            code = code,
-                            name = res.Name,
-                            peRatio = res.PEratio.safeToDouble(),
-                            dividendYield = res.DividendYield.safeToDouble(),
-                            pbRatio = res.PBratio.safeToDouble(),
-                            closingPrice = 0.0, // 預設值
-                            monthlyAverage = 0.0,
-                            change = 0.0,
-                            openingPrice = 0.0,
-                            highestPrice = 0.0,
-                            lowestPrice = 0.0,
-                            tradeNum = 0,
-                            tradeVolume = 0,
-                            tradeValue = 0
+                avgList.forEach { item ->
+                    masterMap[item.Code]?.let { existing ->
+                        masterMap[item.Code] = existing.copy(
+                            closingPrice = item.ClosingPrice.safeToDouble(),
+                            monthlyAverage = item.MonthlyAveragePrice.safeToDouble()
                         )
-                    } else {
-                        // modify
-                        currentMap[code] = existingStock.copy(
-                            peRatio = res.PEratio.safeToDouble(),
-                            dividendYield = res.DividendYield.safeToDouble(),
-                            pbRatio = res.PBratio.safeToDouble()
+                    }
+                }
+
+                evalList.forEach { item ->
+                    masterMap[item.Code]?.let { existing ->
+                        masterMap[item.Code] = existing.copy(
+                            peRatio = item.PEratio.safeToDouble(),
+                            dividendYield = item.DividendYield.safeToDouble(),
+                            pbRatio = item.PBratio.safeToDouble()
                         )
                     }
                 }
 
                 withContext(Dispatchers.Main) {
-                    _stockList.value = currentMap.values.toList()
+                    _stockList.value = masterMap.values.toList()
                 }
 
             } catch (e: Exception) {
