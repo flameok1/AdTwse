@@ -3,14 +3,75 @@ package com.example.adtwse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.adtwse.data.model.StockInfo
+import com.example.adtwse.data.repository.StockRepository
+import com.example.adtwse.network.StockEvaluationResponse
+import com.example.adtwse.utils.safeToDouble
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel : ViewModel() {
     private val _stockList = MutableLiveData<List<StockInfo>>()
     val stockList: LiveData<List<StockInfo>> = _stockList
 
+    private val _stocks = MutableLiveData<List<StockEvaluationResponse>>()
+    val stocks: LiveData<List<StockEvaluationResponse>> = _stocks
+    private val repository = StockRepository()
+
     init {
-        loadMockData()
+
+    }
+
+    fun loadStocks() {
+        viewModelScope.launch {
+            try {
+                val response = repository.fetchStocks()
+
+
+                val currentMap = _stockList.value?.associateBy { it.code }?.toMutableMap() ?: mutableMapOf()
+
+                response.forEach { res ->
+                    val code = res.Code
+                    val existingStock = currentMap[code]
+
+                    if (existingStock == null) {
+                        // no data
+                        currentMap[code] = StockInfo(
+                            code = code,
+                            name = res.Name,
+                            peRatio = res.PEratio.safeToDouble(),
+                            dividendYield = res.DividendYield.safeToDouble(),
+                            pbRatio = res.PBratio.safeToDouble(),
+                            closingPrice = 0.0, // 預設值
+                            monthlyAverage = 0.0,
+                            change = 0.0,
+                            openingPrice = 0.0,
+                            highestPrice = 0.0,
+                            lowestPrice = 0.0,
+                            tradeNum = 0,
+                            tradeVolume = 0,
+                            tradeValue = 0
+                        )
+                    } else {
+                        // modify
+                        currentMap[code] = existingStock.copy(
+                            peRatio = res.PEratio.safeToDouble(),
+                            dividendYield = res.DividendYield.safeToDouble(),
+                            pbRatio = res.PBratio.safeToDouble()
+                        )
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    _stockList.value = currentMap.values.toList()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun loadMockData() {

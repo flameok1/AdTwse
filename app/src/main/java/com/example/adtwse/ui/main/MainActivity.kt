@@ -23,5 +23,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.stockList.observe(this) { stocks ->
             recyclerView.adapter = StockAdapter(stocks)
         }
+
+        viewModel.loadStocks()
     }
 }
