@@ -11,4 +11,5 @@
     <string name="label_trade_volume">成交股數</string>
     <string name="label_transaction_count">成交筆數</string>
     <string name="label_trade_value">成交金額</string>
+    <string name="place_hold">輸入代碼或名稱</string>
 </resources>

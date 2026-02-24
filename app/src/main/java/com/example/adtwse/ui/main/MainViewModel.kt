@@ -15,14 +15,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel : ViewModel() {
-    private val _stockList = MutableLiveData<List<StockInfo>>()
-    val stockList: LiveData<List<StockInfo>> = _stockList
+    private val _stockAll = mutableListOf<StockInfo>()
 
-    private val _stocks = MutableLiveData<List<StockEvaluationResponse>>()
-    val stocks: LiveData<List<StockEvaluationResponse>> = _stocks
+    private val _displayList = MutableLiveData<List<StockInfo>>()
+
+
+    val displayList: LiveData<List<StockInfo>> = _displayList
+
     private val repository = StockRepository()
 
     private var isUpdating = false
+
+    private var currentQuery = ""
+    private var sortType = 0 // 0: 預設, 1: 代碼升序, 2: 代碼降序
 
     init {
 
@@ -82,7 +87,9 @@ class MainViewModel : ViewModel() {
                 }
 
                 withContext(Dispatchers.Main) {
-                    _stockList.value = masterMap.values.toList()
+                    _stockAll.clear()
+                    _stockAll.addAll(masterMap.values.toList())
+                    applyFilterAndSort()
                 }
 
             } catch (e: Exception) {
@@ -129,15 +136,37 @@ class MainViewModel : ViewModel() {
                 pbRatio = 1.1
             )
         )
-        _stockList.value = mock
+        _displayList.value = mock
     }
 
-    fun sortStocks(descending: Boolean) {
-        val currentList = _stockList.value ?: return
-        _stockList.value = if (descending) {
-            currentList.sortedByDescending { it.code }
-        } else {
-            currentList.sortedBy { it.code }
+    fun setSearchQuery(query: String) {
+        currentQuery = query
+        applyFilterAndSort()
+    }
+
+    fun toggleSort() {
+        sortType = (sortType + 1) % 3 // 在 0, 1, 2 之間切換
+        applyFilterAndSort()
+    }
+
+    fun getSortText(): String = when(sortType) {
+        1 -> "排序：代碼 ↑"
+        2 -> "排序：代碼 ↓"
+        else -> "排序：預設"
+    }
+
+    private fun applyFilterAndSort() {
+        var result = _stockAll.filter {
+            it.name.contains(currentQuery, ignoreCase = true) ||
+                    it.code.contains(currentQuery)
         }
+
+        result = when (sortType) {
+            1 -> result.sortedBy { it.code }
+            2 -> result.sortedByDescending { it.code }
+            else -> result
+        }
+
+        _displayList.value = result
     }
 }
