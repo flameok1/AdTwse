@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.adtwse.data.model.StockInfo
 
-class StockAdapter(private val stocks: List<StockInfo>) :
+class StockAdapter(private var stocks: List<StockInfo>) :
     RecyclerView.Adapter<StockAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -83,6 +83,11 @@ class StockAdapter(private val stocks: List<StockInfo>) :
                 .setPositiveButton("確定", null) // 提供關閉按鈕
                 .show()
         }
+    }
+
+    fun updateData(newStocks: List<StockInfo>) {
+        this.stocks = newStocks
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = stocks.size
